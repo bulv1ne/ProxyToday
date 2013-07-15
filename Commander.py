@@ -22,18 +22,18 @@ init(autoreset=True)
 #
 def beep():
 	winsound.Beep(1550,650)
-def GET_EXTERNAL_IP():
+def get_external_ip():
 	address = "http://www.ipchicken.com"
 	string = urllib2.urlopen(address).read()
 	EX_IP = re.search(r'\d+\.\d+\.\d+\.\d+', string).group()    
 	return EX_IP
-def TEST_PROXY(PROXY, PORT):
+def test_proxy(PROXY, PORT):
 	try:
 		proxy 	= urllib2.ProxyHandler({'http':PROXY+':'+PORT})
 		auth	= urllib2.HTTPBasicAuthHandler()
 		opener	= urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 		install = urllib2.install_opener(opener)
-		IP		= GET_EXTERNAL_IP()
+		IP		= get_external_ip()
 		return True
 	except: 
 		pass
@@ -55,7 +55,7 @@ def STOP_PROXY():
 	REFRESH_INTERNET_SETTINGS()
 	print Fore.RED+Style.BRIGHT+"\n\a Using PROXY has been stopped!"
 def USE_PROXY(PROXY,IP):
-	if TEST_PROXY(PROXY,IP) == True:
+	if test_proxy(PROXY,IP) == True:
 		PROXY_IP = str(PROXY+":"+str(IP))
 		aReg = ConnectRegistry(None,HKEY_CURRENT_USER)
 		aKey = OpenKeyEx(aReg, r'Software\Microsoft\Windows\CurrentVersion\Internet Settings', 0, KEY_ALL_ACCESS)
@@ -98,7 +98,7 @@ def COMMANDER():
 			beep()
 	elif CMD[0] == 'test':
 		try:
-			if TEST_PROXY(PROXY, PORT) == True:
+			if test_proxy(PROXY, PORT) == True:
 				print Fore.GREEN+Style.BRIGHT+"\n\a \* Proxy is \x18 UP"
 			else: 
 				print Fore.RED+Style.BRIGHT+"\n\a \* Proxy is \x19 DOWN"
